@@ -79,7 +79,7 @@ GET /dsh-cy-api/api/connection
 
 返回结构与页面展示完全一致（不含明文密钥，`secretSet` 表示是否已保存）。**页面只是这份唯一数据的编辑入口，数据本身不依赖页面是否打开。**
 
-## 功能（v0.0.0）
+## 功能（v2026.11.5）
 
 - 侧边栏新增 **API 转 DSH** 入口，点开就是插件页面
 - **顶部导航**：标签按钮在「接口配置」与「数据调用」两页之间切换，带下划线与键盘支持
@@ -96,7 +96,7 @@ GET /dsh-cy-api/api/connection
 
 ```
 dsh-cy-api/
-├── package.json          # 名称 dsh-cy-api、版本 0.0.0、dsh.bundle / dsh.client 声明
+├── package.json          # 名称 dsh-cy-api、版本 2026.11.5、dsh.bundle / dsh.client 声明
 ├── cordis.patch.yml      # bundle 层：插入 dsh-cy-api 这一行
 ├── icon.svg              # 插件图标
 ├── locale/
