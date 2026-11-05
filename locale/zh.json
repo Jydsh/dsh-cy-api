@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "API 转 DSH",
+    "description": "把 HTTP 接口登记成 DSH 工具，并提供一个全局注入的管理页面。"
+  }
+}

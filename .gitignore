@@ -1,0 +1,19 @@
+# 依赖与构建产物
+node_modules/
+coverage/
+
+# 本地凭据与配置：绝不要提交
+.env
+.env.*
+*.key
+secret.key
+config.json
+
+# 备份与临时文件
+*.bak
+*.bak-*
+*.log
+*.tmp
+rename-backup-*/
+.DS_Store
+Thumbs.db

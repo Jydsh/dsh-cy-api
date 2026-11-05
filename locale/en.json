@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "API to DSH",
+    "description": "Register HTTP endpoints as DSH tools, with a globally injected management page."
+  }
+}

@@ -1,0 +1,11 @@
+# dsh-cy-api bundle layer
+#
+# Declared by package.json#dsh.bundle.patch. Only the Host half is a loader row;
+# the browser half is discovered from package.json#dsh.client and served at
+# /plugins/dsh-cy-api/client.js.
+#
+# The row id is also the global panel id used by the client half: keep `dsh-cy-api`.
+- insert:
+    - id: dsh-cy-api
+      name: dsh-cy-api
+      config: {}
