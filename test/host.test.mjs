@@ -184,6 +184,19 @@ test('the probe sends the credentials and classifies the answer', async () => {
         res.end(JSON.stringify({ ErrorMessage: 'EngineSecret 无效' }))
         return
       }
+      if (mode === 'data') {
+        // A successful payload whose business fields carry personal records:
+        // the auth keywords must not match on the data itself.
+        res.writeHead(200, { 'content-type': 'application/json' })
+        res.end(
+          JSON.stringify({
+            Successful: true,
+            ErrorMessage: null,
+            ReturnData: { data: [{ 姓名: '张三', 身份证号: '525011199080008166', 手机号: '13800138000' }] },
+          }),
+        )
+        return
+      }
       res.writeHead(200, { 'content-type': 'application/json' })
       res.end(JSON.stringify({ ErrorMessage: '身份认证失败' }))
     })
@@ -218,6 +231,14 @@ test('the probe sends the credentials and classifies the answer', async () => {
     const keyword = await api(origin, 'POST', '/connection/test', {})
     assert.equal(keyword.body.ok, false)
     assert.equal(keyword.body.code, 'AUTH')
+
+    // A successful answer that merely contains personal records (with an ID
+    // number field) is a pass — the payload must not be read as auth text.
+    mode = 'data'
+    const withData = await api(origin, 'POST', '/connection/test', {})
+    assert.equal(withData.body.ok, true)
+    assert.equal(withData.body.code, 'OK')
+    assert.doesNotMatch(withData.body.message, /认证失败/)
 
     // A draft can be tested before saving; the stored secret is not needed.
     const draft = await api(origin, 'POST', '/connection/test', {

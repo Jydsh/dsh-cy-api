@@ -1,6 +1,6 @@
 {
   "name": "dsh-cy-api",
-  "version": "2026.11.12",
+  "version": "2026.11.13",
   "private": true,
   "description": "dsh-cy-api：把 HTTP 接口登记并转换成 DeepSeek Harness（DSH）里的工具，附带一个全局注入的管理页面。",
   "type": "module",

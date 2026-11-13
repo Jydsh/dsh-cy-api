@@ -1,8 +1,8 @@
 # dsh-cy-api
 
-把 HTTP 接口转成 DeepSeek Harness（DSH）里的可调用能力。**当前版本 v2026.11.12**，已交付：全局注入的「接口 + 组织架构凭据」配置页（唯一连接），以及在这份连接之上登记多个可调用接口动作的「数据调用」登记表。
+把 HTTP 接口转成 DeepSeek Harness（DSH）里的可调用能力。**当前版本 v2026.11.13**，已交付：全局注入的「接口 + 组织架构凭据」配置页（唯一连接），以及在这份连接之上登记多个可调用接口动作的「数据调用」登记表。
 
-> 版本声明：`package.json` 中写作 `"version": "2026.11.12"`（npm 语义化版本不允许 `v` 前缀、也不允许前导零），git tag 与 GitHub Release 使用 `v2026.11.12`。
+> 版本声明：`package.json` 中写作 `"version": "2026.11.13"`（npm 语义化版本不允许 `v` 前缀、也不允许前导零），git tag 与 GitHub Release 使用 `v2026.11.13`。
 
 ## 两类数据：一条连接 + 多张接口登记表
 
@@ -79,16 +79,17 @@ GET /dsh-cy-api/api/connection
 
 返回结构与页面展示完全一致（不含明文密钥，`secretSet` 表示是否已保存）。**页面只是这份唯一数据的编辑入口，数据本身不依赖页面是否打开。**
 
-## 功能（v2026.11.12）
+## 功能（v2026.11.13）
 
 - 侧边栏新增 **API 转 DSH** 入口，点开就是插件页面
 - **顶部导航**：标签按钮在「接口配置」与「数据调用」两页之间切换，带下划线与键盘支持
 - 三项唯一字段的新增 / 修改 / 清除，无列表、无重复
 - **测试连接**：由宿主用当前填写（或已保存）的地址与凭据真实发一次探针，显示状态码、耗时、判定结论与响应预览
-- 探针按氚云 OpenApi 的方式发送：`POST <接口地址>`，请求头带 `EngineCode` / `EngineSecret`，请求体 `{"ActionName":"GetServerTime","ControllerName":""}`；`401/403` 或认证类文案判为认证失败，2xx 且无认证错误判为通过
+- 探针按氚云 OpenApi 的方式发送：`POST <接口地址>`，请求头带 `EngineCode` / `EngineSecret`，请求体 `{"ActionName":"GetServerTime","ControllerName":""}`；判定顺序为 `401/403` → 认证类文案 → 平台到期 / 地址不存在 → HTTP 失败 → 通过
+- **认证判定只读服务端自己的错误文案**（`ErrorMessage` / `Message` / `ReturnData.message` / `OpenApiError.ErrorMessage` 等），业务响应正文不参与关键词匹配；`Successful: true` 的响应直接判通过——数据里出现「身份证号」「权限」这类字段名不会被误读成认证失败（v2026.11.13 修复）
 - **接口登记表**：「数据调用」页可在唯一连接之上增 / 删 / 改多条接口动作（名称、ActionName、ControllerName、用途说明、是否启用、自定义参数名/类型/必填），与连接一起落盘
 - **独立编辑页**：点「新增接口」/「编辑接口」会切换到一个独立的全屏编辑页（不在列表里展开表单）；保存成功后自动回到「数据调用」列表，点「返回」可手动返回
-- **测试该接口**：每条接口旁有「测试」按钮，展开后按它声明的参数填入本次测试值，宿主用已保存的连接凭据真实发一次请求，回显状态码、耗时、判定结论与 Pretty JSON 响应预览；请求体按氚云自定义接口格式拼成 `{ActionName, Controller, AppCode, ...参数值}`
+- **测试该接口**：每条接口旁有「测试」按钮，展开后按它声明的参数填入本次测试值，宿主用已保存的连接凭据真实发一次请求，回显状态码、耗时、判定结论与 Pretty JSON 响应预览；请求体按氚云自定义接口格式拼成 `{ActionName, Controller, AppCode, ...参数值}`；响应预览只保留前 600 字符，超出时后缀标注「共 N 字节，预览已截断」，不会把整份业务数据铺到页面上
 - 只读回显：页面直接展示 `GET /connection` 的返回内容与更新时间、存储位置
 - 中文 / 英文双语（走 DSH 的 locale 服务）
 
@@ -96,7 +97,7 @@ GET /dsh-cy-api/api/connection
 
 ```
 dsh-cy-api/
-├── package.json          # 名称 dsh-cy-api、版本 2026.11.12、dsh.bundle / dsh.client 声明
+├── package.json          # 名称 dsh-cy-api、版本 2026.11.13、dsh.bundle / dsh.client 声明
 ├── cordis.patch.yml      # bundle 层：插入 dsh-cy-api 这一行
 ├── icon.svg              # 插件图标
 ├── locale/
@@ -226,7 +227,7 @@ profile 目录：Windows 为 `%USERPROFILE%\.dsh\profiles\desktop`，macOS 为 `
 
 ```powershell
 cd "$env:USERPROFILE\.dsh\profiles\desktop"
-pnpm add "github:Jydsh/dsh-cy-api#v2026.11.12"
+pnpm add "github:Jydsh/dsh-cy-api#v2026.11.13"
 ```
 
 ### Web 环境（DSH Web 服务）
@@ -235,7 +236,7 @@ profile 目录在 Web 实例的数据目录下，即 `$DSH_HOME/profiles/<profil
 
 ```bash
 cd "${DSH_HOME}/profiles/web"
-pnpm add "github:Jydsh/dsh-cy-api#v2026.11.12"
+pnpm add "github:Jydsh/dsh-cy-api#v2026.11.13"
 ```
 
 ### 之后都要做的一步
@@ -244,7 +245,7 @@ pnpm add "github:Jydsh/dsh-cy-api#v2026.11.12"
 
 ```jsonc
 // package.json
-"dependencies": { "dsh-cy-api": "github:Jydsh/dsh-cy-api#v2026.11.12" },
+"dependencies": { "dsh-cy-api": "github:Jydsh/dsh-cy-api#v2026.11.13" },
 "dsh": { "profile": { "bundles": [ ..., "dsh-cy-api" ] } }
 ```
 
@@ -283,7 +284,7 @@ node --test test/*.test.mjs
 登记表已经把"要调哪些接口"列好了，接口也已注册成 DSH 工具；接下来：
 
 1. 工具注册状态（成功 / 失败 / 参数 schema）回显在「数据调用」页每条接口上
-2. v2026.11.12 已发布到 GitHub（tag / Release），「版本更新」页签现在显示真实的最新版本
+2. v2026.11.13 已发布到 GitHub（tag / Release），「版本更新」页签现在显示真实的最新版本
 
 ## 已知限制
 
@@ -293,3 +294,11 @@ node --test test/*.test.mjs
 - 探针固定使用氚云 OpenApi 的 `GetServerTime` 动作；换成别的平台时需要改探针
 - 密钥与数据库放在同一目录：能同时读取两者的本机进程可以解密。这防的是配置误传、备份泄露和日志泄露，不是同机同用户的恶意进程
 - 页面在真实浏览器里的渲染仍需人工确认（本机无浏览器控制通道）；宿主接口、bundle 服务与启动图已实测通过
+
+## 更新记录
+
+| 版本 | 内容 |
+| --- | --- |
+| `v2026.11.13` | 修复「认证失败」误判：`ErrorMessage` 为空时不再把整份响应正文当错误文案，认证判定改为「只读服务端自有文案 + `Successful:true` 直接放行」，正则里裸匹配的「身份」收窄为「身份验证 / 身份认证 / 身份校验」；响应预览截断到 600 字符并标注总字节数；`Successful:false` 时探针明确回报「认证通过，但接口调用返回失败」而不是认证失败 |
+| `v2026.11.12` | 「版本更新」页签 + GitHub 版本检查（`GET /version`，优先 latest release、无 Release 回退最高 tag） |
+| `v2026.11.05` | 首个发布版本：唯一连接 + 多接口登记、独立编辑页、接口转 DSH 工具、中英双语 |

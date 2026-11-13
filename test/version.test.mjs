@@ -158,8 +158,8 @@ test('GET /version returns the check result over the plugin API', async () => {
   globalThis.fetch = async (url, init) => {
     if (String(url).startsWith('https://api.github.com')) {
       return jsonResponse(200, {
-        tag_name: 'v2026.11.13',
-        html_url: 'https://github.com/Jydsh/dsh-cy-api/releases/tag/v2026.11.13',
+        tag_name: 'v2026.11.14',
+        html_url: 'https://github.com/Jydsh/dsh-cy-api/releases/tag/v2026.11.14',
         published_at: '2026-10-27T00:00:00Z',
       })
     }
@@ -170,7 +170,7 @@ test('GET /version returns the check result over the plugin API', async () => {
     assert.equal(response.status, 200)
     assert.equal(response.body.repository, REPOSITORY)
     assert.equal(typeof response.body.currentVersion, 'string')
-    assert.equal(response.body.latestVersion, '2026.11.13')
+    assert.equal(response.body.latestVersion, '2026.11.14')
     assert.equal(response.body.hasUpdate, true)
     assert.equal(response.body.source, 'release')
     assert.equal(typeof response.body.checkedAt, 'string')
