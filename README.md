@@ -1,8 +1,8 @@
 # dsh-cy-api
 
-把 HTTP 接口转成 DeepSeek Harness（DSH）里的可调用能力。**当前版本 v2026.11.13**，已交付：全局注入的「接口 + 组织架构凭据」配置页（唯一连接），以及在这份连接之上登记多个可调用接口动作的「数据调用」登记表。
+把 HTTP 接口转成 DeepSeek Harness（DSH）里的可调用能力。**当前版本 v2026.11.13.1**，已交付：全局注入的「接口 + 组织架构凭据」配置页（唯一连接），以及在这份连接之上登记多个可调用接口动作的「数据调用」登记表。
 
-> 版本声明：`package.json` 中写作 `"version": "2026.11.13"`（npm 语义化版本不允许 `v` 前缀、也不允许前导零），git tag 与 GitHub Release 使用 `v2026.11.13`。
+> 版本声明：`package.json` 中写作 `"version": "2026.11.13.1"`（npm 语义化版本不允许 `v` 前缀；本版是四段式补丁号，`npm pack` 已实测接受），git tag 与 GitHub Release 使用 `v2026.11.13.1`。
 
 ## 两类数据：一条连接 + 多张接口登记表
 
@@ -79,7 +79,7 @@ GET /dsh-cy-api/api/connection
 
 返回结构与页面展示完全一致（不含明文密钥，`secretSet` 表示是否已保存）。**页面只是这份唯一数据的编辑入口，数据本身不依赖页面是否打开。**
 
-## 功能（v2026.11.13）
+## 功能（v2026.11.13.1）
 
 - 侧边栏新增 **API 转 DSH** 入口，点开就是插件页面
 - **顶部导航**：标签按钮在「接口配置」与「数据调用」两页之间切换，带下划线与键盘支持
@@ -97,7 +97,7 @@ GET /dsh-cy-api/api/connection
 
 ```
 dsh-cy-api/
-├── package.json          # 名称 dsh-cy-api、版本 2026.11.13、dsh.bundle / dsh.client 声明
+├── package.json          # 名称 dsh-cy-api、版本 2026.11.13.1、dsh.bundle / dsh.client 声明
 ├── cordis.patch.yml      # bundle 层：插入 dsh-cy-api 这一行
 ├── icon.svg              # 插件图标
 ├── locale/
@@ -227,7 +227,7 @@ profile 目录：Windows 为 `%USERPROFILE%\.dsh\profiles\desktop`，macOS 为 `
 
 ```powershell
 cd "$env:USERPROFILE\.dsh\profiles\desktop"
-pnpm add "github:Jydsh/dsh-cy-api#v2026.11.13"
+pnpm add "github:Jydsh/dsh-cy-api#v2026.11.13.1"
 ```
 
 ### Web 环境（DSH Web 服务）
@@ -236,7 +236,7 @@ profile 目录在 Web 实例的数据目录下，即 `$DSH_HOME/profiles/<profil
 
 ```bash
 cd "${DSH_HOME}/profiles/web"
-pnpm add "github:Jydsh/dsh-cy-api#v2026.11.13"
+pnpm add "github:Jydsh/dsh-cy-api#v2026.11.13.1"
 ```
 
 ### 之后都要做的一步
@@ -245,7 +245,7 @@ pnpm add "github:Jydsh/dsh-cy-api#v2026.11.13"
 
 ```jsonc
 // package.json
-"dependencies": { "dsh-cy-api": "github:Jydsh/dsh-cy-api#v2026.11.13" },
+"dependencies": { "dsh-cy-api": "github:Jydsh/dsh-cy-api#v2026.11.13.1" },
 "dsh": { "profile": { "bundles": [ ..., "dsh-cy-api" ] } }
 ```
 
@@ -284,7 +284,7 @@ node --test test/*.test.mjs
 登记表已经把"要调哪些接口"列好了，接口也已注册成 DSH 工具；接下来：
 
 1. 工具注册状态（成功 / 失败 / 参数 schema）回显在「数据调用」页每条接口上
-2. v2026.11.13 已发布到 GitHub（tag / Release），「版本更新」页签现在显示真实的最新版本
+2. v2026.11.13.1 已发布到 GitHub（tag / Release），「版本更新」页签现在显示真实的最新版本
 
 ## 已知限制
 
@@ -299,6 +299,7 @@ node --test test/*.test.mjs
 
 | 版本 | 内容 |
 | --- | --- |
+| `v2026.11.13.1` | 版本号补丁发布：本次无功能代码变更，仅递增版本号并同步文档；用途是让「版本更新」页签与 `GET /version` 能识别出一个高于 `2026.11.13` 的新版本，验证升级提示链路 |
 | `v2026.11.13` | 修复「认证失败」误判：`ErrorMessage` 为空时不再把整份响应正文当错误文案，认证判定改为「只读服务端自有文案 + `Successful:true` 直接放行」，正则里裸匹配的「身份」收窄为「身份验证 / 身份认证 / 身份校验」；响应预览截断到 600 字符并标注总字节数；`Successful:false` 时探针明确回报「认证通过，但接口调用返回失败」而不是认证失败 |
 | `v2026.11.12` | 「版本更新」页签 + GitHub 版本检查（`GET /version`，优先 latest release、无 Release 回退最高 tag） |
 | `v2026.11.05` | 首个发布版本：唯一连接 + 多接口登记、独立编辑页、接口转 DSH 工具、中英双语 |
